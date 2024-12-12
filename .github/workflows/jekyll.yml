@@ -1,0 +1,31 @@
+# Create the map
+fig = go.Figure()
+
+# Add lines for bilateral agreements
+for i, row in labor_agreements.iterrows():
+    lat_a, lon_a = row["Lat_A"], row["Lon_A"]
+    lat_b, lon_b = row["Lat_B"], row["Lon_B"]
+
+    if lat_a and lon_a and lat_b and lon_b:  # Ensure valid coordinates
+        fig.add_trace(
+            go.Scattergeo(
+                lon=[lon_a, lon_b],
+                lat=[lat_a, lat_b],
+                mode="lines+markers",
+                line=dict(width=2, color="lightblue"),
+                marker=dict(size=5, color="brown"),
+                name=f"{row['countryA']} ↔ {row['countryB']} ({row['year']})"
+            )
+        )
+# Update layout
+fig.update_layout(
+    geo=dict(
+        showcoastlines=True,
+        showcountries=True,
+        projection_type="equirectangular",
+    ),
+    title="Bilateral Labor Agreements",
+    width = 1200,
+    height = 800
+)
+
